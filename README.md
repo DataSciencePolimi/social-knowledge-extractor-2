@@ -18,6 +18,7 @@ The Social Knowledge Extractor (SKE) is a software tool that allows to discover 
   - credentialsDandelion.json : your app_key and app_id (of your Dandelion account): {"app_key" : "", "app_id" : ""}
   - credentialsTwitter.json : your Twitter account : {"consumer_key": "", "access_token_secret": "", "access_token": "", "consumer_secret": ""}
  * create a file with the account names of your seeds
+ * create a file with Expert Types
  * setup on pipeline.sh the number of your experiment and the name of the file of your seeds
 
 ### Run ###
@@ -58,11 +59,11 @@ The Social Knowledge Extractor (SKE) is a software tool that allows to discover 
 
 ## Databases (both called ske_2): ##
 # SQL #
-* * "seeds": screen_name, id_experiment
-* * "candidates": screen_name, id_experiment, score
+*  "seeds": screen_name, id_experiment
+*  "candidates": screen_name, id_experiment, score
 # Mongo #
-* * "tweets": id_user, text, lang, favourite_count, reqteet_count, create_at, mentions, id_tweet, id_experiment, coordinates, annotations
-* * "users": id_user, screen_name, id_experiment, type, features
+*  "tweets": id_user, text, lang, favourite_count, reqteet_count, create_at, mentions, id_tweet, id_experiment, coordinates, annotations
+*  "users": id_user, screen_name, id_experiment, type, features
 
 
 
