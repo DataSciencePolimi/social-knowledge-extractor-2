@@ -1,51 +1,50 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+The Social Knowledge Extractor (SKE) is a software tool that allows to discover new entities using Twitter.
+### INSTALLATION GUIDE ###
+## Requirements ##
+* Python (>3.4.0) and pip
+* MongoDB
+* MySQL
+* A Dandelion Account
+* A Twitter Application
 
-### What is this repository for? ###
+## Setting up ##
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* Download the repository
+* Create 4 files for configuration:
+  - addressMongo.json : setup of your Mongo, port, host and name_db: {"port_local": "", "adress_local": "", "name_db": ""}
+  - addressMySQL.json : setup of your MySQL, password, user, host, database: {"password": "", "user": "", "host": "", "database": ""}
+  - credentialsDandelion.json : your app_key and app_id (of your Dandelion account): {"app_key" : "", "app_id" : ""}
+  - credentialsTwitter.json : your Twitter account : {"consumer_key": "", "access_token_secret": "", "access_token": "", "consumer_secret": ""}
+ * create a file with the account names of your seeds
+ * setup on pipeline.sh the number of your experiment and the name of the file of your seeds
 
-### How do I get set up? ###
+### Run ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
+* from the terminal run pipeline.sh: bash pipeline.sh
 
 
-storeSeed.py
+### Legenda ###
+
+
+# storeSeed.py #
 * takes as input a csv file of seed names and an id experiment
 * write "seeds" in sql db
 
-twitter.py
+# twitter.py #
 * takes as input parameters(N or dates), id experiment, type (seeds or candidates)
 * write "tweets" and "users" in mongo db
 
-myDandelion.py
+# myDandelion.py #
 * takes as input id experiment
 * write annotations in "tweets" in mongo db
 
-createFeatureVector.py
+# createFeatureVector.py #
 * takes as input id experiment and type
 * write features in "users" in mongo db
 
-listCandidates.py
+# listCandidates.py #
 * takes as input id experiment
 * write "candidates" in sql db
 
@@ -57,11 +56,11 @@ listCandidates.py
 
 
 
-Databases (both called ske_2):
-* SQL
+## Databases (both called ske_2): ##
+# SQL #
 * * "seeds": screen_name, id_experiment
 * * "candidates": screen_name, id_experiment, score
-* Mongo
+# Mongo #
 * * "tweets": id_user, text, lang, favourite_count, reqteet_count, create_at, mentions, id_tweet, id_experiment, coordinates, annotations
 * * "users": id_user, screen_name, id_experiment, type, features
 
