@@ -1,11 +1,12 @@
 id_exp=1
 N=100
 seed = seed.csv
+expert = expert.csv
 python3 setupMySQL.py
 echo setup
-python3 storeSeed.py seed.csv $id_exp
+python3 storeSeed.py seed $id_exp
 echo storeSeed
-python3 storeExpertTypes.py seed $id_exp
+python3 storeExpertTypes.py expert $id_exp
 echo store exp
 python3 twitter.py -x $id_exp -n $N seeds
 echo twitter
