@@ -1,0 +1,9 @@
+# OS generated files #
+######################
+.DS_Store
+
+adressMongo.json
+adressMySQL.json
+credentialsDandelion.json
+credentialsTwitter.json
+USAChess_seed4.csv
