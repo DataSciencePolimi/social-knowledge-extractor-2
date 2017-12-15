@@ -12,10 +12,17 @@ def loginMySql():
         print("do setup MySQL")
     return client, cursor
 
-def storeSeed(cursor, data):
-    add_seed = ('INSERT INTO seeds (screen_name, id_experiment) VALUES (%(screen_name)s, %(id_experiment)s)')
-    cursor.execute(add_seed,data)
+def storeSeed(cursor, screen_name, id_experiment):
+    add_seed = ('INSERT INTO seeds (screen_name, id_experiment) VALUES ("'+screen_name+'", "'+str(id_experiment)+'")')
+    cursor.execute(add_seed)
 
+def getAccounts(cursor, id_experiment, name_table):
+    command = ("SELECT screen_name FROM "+name_table+" WHERE id_experiment = "+id_experiment)
+    cursor.execute(command)
+    accounts = []
+    for name in cursor:
+        accounts.append(name[0])
+    return accounts
 
 def main():
     try:
@@ -25,8 +32,12 @@ def main():
     args = sys.argv[1:]
     fileAccounts = open(args[0],'r').readlines()
     id_experiment = args[1]
+    
+    seeds = getAccounts(cursor, id_experiment, 'seeds')
     for account in fileAccounts:
-        storeSeed(cursor, {'screen_name':account.lower().replace('\n',''), 'id_experiment':id_experiment})
+    	screen_name = account.lower().replace('\n','').replace(' ','')
+    	if screen_name not in seeds:
+    		storeSeed(cursor, screen_name, id_experiment)
     dbSQL.commit()
     cursor.close()
     dbSQL.close()
