@@ -55,12 +55,20 @@ def main():
                         "  `id_experiment` char(20) NOT NULL,"
                         " `id` int NOT NULL AUTO_INCREMENT,"
                            "PRIMARY KEY (`id`))")
+    TABLES['validated'] = (
+                        "CREATE TABLE `validated` ("
+                        "  `screen_name` char(20) NOT NULL,"
+                        "  `id_experiment` char(20) NOT NULL,"
+                        " `score` float default NULL,"
+                        " `id` int NOT NULL AUTO_INCREMENT,"
+                           "PRIMARY KEY (`id`))")
     TABLES['expert_types'] = (
                        "CREATE TABLE `expert_types` ("
                        "  `type` char(20) NOT NULL,"
                        "  `id_experiment` char(20) NOT NULL,"
                        " `id` int NOT NULL AUTO_INCREMENT,"
                        "PRIMARY KEY (`id`))")
+    
     try:
         dbSQL.database = db_name
         print('db already exists')
