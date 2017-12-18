@@ -56,7 +56,6 @@ def callDandelion(text, datatxt):
 def storeAnnotations(id_tweet, annotation, mongo_client):
     collection = 'tweets'
     tweet = mongo_client[collection].find_one({'_id':id_tweet})
-    print(tweet['text'], annotation['spot'])
     if 'annotation' not in tweet:
         tweet['annotation'] = annotation
         mongo_client[collection].update_one({'_id':id_tweet}, {"$set": {'annotation':annotation}}, upsert=False)
@@ -135,8 +134,10 @@ def main():
     	start = 0 #indice di inizio del sottotesto che dobbiamo inviare a dandelion
     	annotations = []
     	
+    	print('numbOfCalls: ',numbOfCalls)
     	#dandelion
     	for i in range(numbOfCalls):
+    		print('Call number: ',i)
     		end = start + num_bytes #indice di fine del sottotesto che dobbiamo inviare a dandelion
     		if (end> lenght): #nel caso in cui la fine è dopo la fine del nostro testo
     			end = lenght
@@ -172,7 +173,8 @@ def main():
     			tweet_annotation[t].append(ann)
     	for tw in tweet_annotation:
     		storeAnnotations(tw,tweet_annotation[tw], mongo_client) #aggiorniamo il tweet in mongo
-    print('end Dandelion',type)
+        print('end language: ',lang)
+    print('end Dandelion')
     #fine :)
 
 
