@@ -71,7 +71,7 @@ def storeTweets(tweets, db):
         db[collection].insert(tweets)
     else:
         if str(experiment) not in t['id_experiment']:
-#            print(experiment, t['id_experiment'])
+            print(experiment, t['id_experiment'])
             t['id_experiment']+= experiment
         db[collection].update_one({'_id':t['_id']}, {"$set": t}, upsert= False)
         print('tweet already exists')
@@ -139,7 +139,6 @@ def main():
             tweets = getTweets(twitter, account, int(N), start_date, end_date, id_experiment)
             user_id = tweets[0]['id_user']
             storeUser(account, user_id, id_experiment, db, name_table)
-        
         except:
             print(account+' error')
 #        scrivi errore nel log
@@ -154,8 +153,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-
 

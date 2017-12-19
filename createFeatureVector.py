@@ -33,7 +33,7 @@ def findTypes(id_experiment,id_user, db):
                         features[type] += 1
                     else:
                         features[type] = 1
-    print(features)
+#    print(features)
     return features
 
 def storeTypes(types, id_experiment,id_user, db):

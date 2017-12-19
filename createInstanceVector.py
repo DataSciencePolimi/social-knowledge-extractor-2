@@ -45,7 +45,7 @@ def findInstances(id_experiment,id_user, expert_types, db):
     collection = 'tweets'
     tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0, 'annotation.uri':1})
     instances = {}
-    print(expert_types)
+#    print(expert_types)
     for t in tweets:
         if 'annotation' in t:
             for i in t['annotation']:
