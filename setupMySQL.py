@@ -42,6 +42,12 @@ def main():
                        "  `id_experiment` char(20) NOT NULL,"
                        " `id` int NOT NULL AUTO_INCREMENT,"
                        "PRIMARY KEY (`id`))")
+    TABLES['hubs'] = (
+                   "CREATE TABLE `hubs` ("
+                   "  `screen_name` char(20) NOT NULL,"
+                   "  `id_experiment` char(20) NOT NULL,"
+                   " `id` int NOT NULL AUTO_INCREMENT,"
+                   "PRIMARY KEY (`id`))")
     TABLES['candidates'] = (
                         "CREATE TABLE `candidates` ("
                         "  `screen_name` char(20) NOT NULL,"
