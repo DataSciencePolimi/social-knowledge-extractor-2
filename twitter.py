@@ -131,19 +131,18 @@ def main():
         elif o == "-x":
             id_experiment = a
     accounts = getAccounts(cursor, id_experiment, name_table)
+    print("number of accounts: ", len(accounts))
     for i in range(len(accounts)):
-#        get the tweets for seed i
         try:
             account = accounts[i]
-            print('crawling account '+ account)
+            print(i, 'crawling account '+ account)
             tweets = getTweets(twitter, account, int(N), start_date, end_date, id_experiment)
             user_id = tweets[0]['id_user']
             storeUser(account, user_id, id_experiment, db, name_table)
         
         except:
             print(account+' error')
-#        scrivi errore nel log
-#       store tweets in db for seed i
+            continue
         try:
             for tweet in tweets:
                 storeTweets(tweet, db)
