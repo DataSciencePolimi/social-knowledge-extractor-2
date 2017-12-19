@@ -74,13 +74,16 @@ def storeTweets(tweets, db):
 #            print(experiment, t['id_experiment'])
             t['id_experiment']+= experiment
         db[collection].update_one({'_id':t['_id']}, {"$set": t}, upsert= False)
-        print('tweet already exists')
+#        print('tweet already exists')
 #log
 
 def storeUser(account, user_id, id_experiment, db,name_table):
     collection = 'users'
     db[collection].insert({'id_user':user_id, 'screen_name':account, 'id_experiment':id_experiment, 'type':name_table})
 
+def storeEmergents(emergent, id_experiment, cursor):
+    command = ("INSERT INTO emergents (screen_name, id_experiment) VALUES ('"+emergent+"', '"+id_experiment+"')")
+    cursor.execute(command)
 
 def getAccounts(cursor, id_experiment, name_table):
     command = ("SELECT screen_name FROM "+name_table+" WHERE id_experiment = "+id_experiment)
@@ -90,6 +93,14 @@ def getAccounts(cursor, id_experiment, name_table):
         accounts.append(name[0])
     return accounts
 
+def getDescription(twitter, account, N, start_date, end_date, id_experiment, count):
+    isEmergent = False
+    description = twitter.get_user(account).description.lower()
+    if 'writ' in description:
+        isEmergent = True
+#        print(account, description)
+        count+=1
+    return count, isEmergent
 
 def main():
 #    do the login
@@ -131,29 +142,38 @@ def main():
         elif o == "-x":
             id_experiment = a
     accounts = getAccounts(cursor, id_experiment, name_table)
-    print("number of accounts: ", len(accounts))
+    count = 0
     for i in range(len(accounts)):
+#        get the tweets for seed i
         try:
             account = accounts[i]
-            print(i, 'crawling account '+ account)
-            tweets = getTweets(twitter, account, int(N), start_date, end_date, id_experiment)
-            user_id = tweets[0]['id_user']
-            storeUser(account, user_id, id_experiment, db, name_table)
-        
+#            print('crawling account '+ account)
+            count, isEmergent = getDescription(twitter, account, int(N), start_date, end_date, id_experiment, count)
+            if isEmergent:
+                print(account)
+            if not isEmergent or True:
+                tweets = getTweets(twitter, account, int(N), start_date, end_date, id_experiment)
+                user_id = tweets[0]['id_user']
+                storeUser(account, user_id, id_experiment, db, name_table)
+#            else:
+#                storeEmergents(account, id_experiment)
+
         except:
             print(account+' error')
-            continue
+#        scrivi errore nel log
+#       store tweets in db for seed i
         try:
-            for tweet in tweets:
-                storeTweets(tweet, db)
+            if not isEmergent or True:
+                for tweet in tweets:
+                    storeTweets(tweet, db)
         except:
             print('errorSalva')
 #        scrivi errore nel log
 
+    print(count)
 
 if __name__ == "__main__":
     main()
-
 
 
 

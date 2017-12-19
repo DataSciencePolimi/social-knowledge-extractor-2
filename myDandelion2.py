@@ -25,7 +25,7 @@ def loginMongo():
 #{tweet: end index}
 #poi lo riscriviamo in inglese comunque ritorna la stringa grande chiamata all_tweets con tutti i tweets (separati come avevamo detto da '. ') e un dizionario con {id_tweet: indice della posizione dove finisce il tweet in all_tweets,...}
 def getTweets(id_exp, mongo_client):
-#    print(mongo_client)
+    print(mongo_client)
     collection = 'tweets'
     
     all_tweets = {"de":"", "en":"", "es":"", "fr":"", "it":"", "pt":""}
@@ -34,7 +34,7 @@ def getTweets(id_exp, mongo_client):
     tweets = mongo_client[collection].find({'id_experiment':{'$in':[str(id_exp)]},'annotation':{'$exists': False}})
 # sarà la stringa che contiene tutti i tweet concatenati e separati da '. '
     #all_tweets = '' #the string of the concatenation ll tweets
-#    print(tweets.count)
+    print(tweets.count)
 # dizionario dove salviamo gli indici di dove finisce ogni tweet in all_tweets
     index_tweets = {"de":[], "en":[], "es":[], "fr":[], "it":[], "pt":[]} #the dictionary
     id_tweets ={"de":[], "en":[], "es":[], "fr":[], "it":[], "pt":[]}
@@ -42,7 +42,7 @@ def getTweets(id_exp, mongo_client):
     count = 0
     for t in tweets:
         count+=1
-#        print(count)
+        print(count)
         id_tweet = t['_id'] #id del tweet che stiamo analizzando
         text = t['text'] #testo del tweet che stiamo analizzando
         lang = t["lang"] #linguaggio del tweet che stiamo analizzando
@@ -50,8 +50,11 @@ def getTweets(id_exp, mongo_client):
         index_tweets[lang].append(len(all_tweets[lang]))
         id_tweets[lang].append(id_tweet)
 #        index_tweets[lang][id_tweet] = len(all_tweets[lang]) #settiamo l'indice di fine del tweet che stiamo analizzando
-#    print(index_tweets)
+    print(index_tweets)
     return all_tweets, index_tweets, id_tweets
+
+def callDandelion(text, datatxt):
+    return datatxt.nex(text, include='types')
 
 
 def storeAnnotations(id_tweet, annotation, mongo_client):
@@ -118,7 +121,6 @@ def main():
 
 #    logine mongo
     mongo_client = loginMongo()
-    
 
 #get all tweets and a dictionary of the index of the end of each tweet
     all_tweets, index_tweets, id_tweets = getTweets(id_exp, mongo_client)
@@ -167,8 +169,7 @@ def main():
             ann['end'] = end-prec #modifichiamo la fine dell'annotazione togliendo la lunghezza del testo prima del tweet in cui c'è l'annotazione ann
             
             if len(ann['types']) != 0:
-                ann['types'] = list(map(lambda x: x.replace('.',''),ann['types']))
-#                ann['types'] = getType(ann['types']) #prendiamo i type corretti (solo quelli più specifici
+                ann['types'] = getType(ann['types']) #prendiamo i type corretti (solo quelli più specifici
             if t not in tweet_annotation:
                 tweet_annotation[t] = [ann]
             else:
