@@ -49,9 +49,6 @@ def getTweets(id_exp, mongo_client):
     
     return all_tweets, index_tweets
 
-def callDandelion(text, datatxt):
-    return datatxt.nex(text, include='types')
-
 
 def storeAnnotations(id_tweet, annotation, mongo_client):
     collection = 'tweets'
