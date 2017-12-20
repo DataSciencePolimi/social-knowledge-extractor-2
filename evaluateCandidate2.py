@@ -112,7 +112,6 @@ def main():
     list_candidates = getCandidates(dbMongo, id_experiment)
 
 #    list_candidatesInstance = getCandidatesInstance(dbMongo, id_experiment)
-    count = 0
 #    for i in centroidType:
 #        count+=centroidType[i]
 
@@ -123,13 +122,14 @@ def main():
             print(user)
         types = candidate['features']
         instances = candidate['instances']
-        for i in types:
-            count+=types[i]
-#        candidate_vector = getCandidateVector(types, instances)
+        print(user, types)
+        print(user, instances)
 
-#        score = evaluateCandidate(centroid, candidate_vector)
-#        storeScore(cursor, id_experiment, user, score)
-        print(count)
+        candidate_vector = getCandidateVector(types, instances)
+
+        score = evaluateCandidate(centroid, candidate_vector)
+        storeScore(cursor, id_experiment, user, score)
+#        print(count)
 
     dbSQL.commit()
     cursor.close()
