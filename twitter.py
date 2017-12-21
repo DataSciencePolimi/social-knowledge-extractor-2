@@ -47,7 +47,7 @@ def getTweets(twitter, account, N, start_date, end_date, id_experiment):
     user_timeline = twitter.user_timeline(screen_name =account, count=1)
     if (user_timeline):
         for i in range(iteration+1):
-            lastTweetId = int(user_timeline[0].id_str)
+            lastTweetId = int(user_timeline[-1].id_str)
             user_timeline = twitter.user_timeline(screen_name = account, max_id = lastTweetId, count = max_per_request)
             for tweets in user_timeline:
                 if (tweets.lang == None):
@@ -59,6 +59,8 @@ def getTweets(twitter, account, N, start_date, end_date, id_experiment):
                 break
     else:
         print('no tweets')
+    print(account, len(user_tweets))
+
     return user_tweets[:N]
 
 
