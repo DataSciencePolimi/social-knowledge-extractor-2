@@ -13,18 +13,22 @@ def getUsers(id_experiment, type, db):
     collection = 'users'
     return db[collection].find({'id_experiment':id_experiment, 'type':type})
 
-def createFeatures(id_experiment, users, db):
+def createFeatures(id_experiment, users, db, N):
     for user in users:
-        types = findTypes(id_experiment, user['id_user'], db)
+        types = findTypes(id_experiment, user['id_user'], db, N)
         storeTypes(types, id_experiment, user['id_user'], db)
 
 #storeTypes(types)
 
 
-def findTypes(id_experiment,id_user, db):
+def findTypes(id_experiment,id_user, db, N):
     collection = 'tweets'
-    tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0})
+    if N != None:
+        tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0}).sort([('create_at',1)]).limit(N)
+    else:
+        tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0})
     features = {}
+
     for t in tweets:
         if 'annotation' in t:
             for i in t['annotation']:
@@ -48,7 +52,7 @@ def main():
         print('error login Mongo')
     
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'x:')
+        opts, args = getopt.getopt(sys.argv[1:], 'n:s:e:x:')
     except getopt.GetoptError as err:
         # print help information and exit:
         print('err')  # will print something like "option -a not recognized"
@@ -56,9 +60,11 @@ def main():
         sys.exit(2)
     id_experiment = args[0]
     type = args[1]
-
+    N = None
+    if len(args)>2:
+        N = int(args[2])
     users = getUsers(id_experiment, type, db)
-    createFeatures(id_experiment, users, db)
+    createFeatures(id_experiment, users, db, N)
 
 if __name__ == "__main__":
     main()

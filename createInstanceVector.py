@@ -33,17 +33,20 @@ def getExpertTypes(id_experiment, cursor):
         expert_types.append(c[0])
     return expert_types
 
-def createFeatures(id_experiment, users, expert_types, db):
+def createFeatures(id_experiment, users, expert_types, db, N):
     for user in users:
-        instances = findInstances(id_experiment, user['id_user'], expert_types, db)
+        instances = findInstances(id_experiment, user['id_user'], expert_types, db, N)
         storeInstances(instances, id_experiment, user['id_user'], db)
 
 #storeTypes(types)
 
 
-def findInstances(id_experiment,id_user, expert_types, db):
+def findInstances(id_experiment,id_user, expert_types, db, N):
     collection = 'tweets'
-    tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0, 'annotation.uri':1})
+    if N != None:
+        tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0, 'annotation.uri':1}).sort([('create_at',-1)]).limit(N)
+    else:
+        tweets = db[collection].find({'id_experiment':id_experiment, 'id_user':id_user},{'annotation.types':1,'_id':0, 'annotation.uri':1})
     instances = {}
 #    print(expert_types)
     for t in tweets:
@@ -82,11 +85,12 @@ def main():
         sys.exit(2)
     id_experiment = args[0]
     type = args[1]
-
+    if len(args)>2:
+        N = int(args[2])
     users = getUsers(id_experiment, type, db)
     expert_types = getExpertTypes(id_experiment, cursor)
     
-    createFeatures(id_experiment, users, expert_types, db)
+    createFeatures(id_experiment, users, expert_types, db, N)
     dbSQL.commit()
     cursor.close()
     dbSQL.close()
