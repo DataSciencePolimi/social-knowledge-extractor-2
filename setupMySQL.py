@@ -6,7 +6,7 @@ def loginMySql():
     keys = json.loads(fileKeys)
     client = mysql.connector.connect(user=keys["user"], password=keys["password"], host=keys["host"])
     cursor = client.cursor()
-    return client, cursor
+    return client, cursor, keys["database"]
 
 def create_database(db_name, cursor):
     try:
@@ -31,10 +31,9 @@ def create_tables(TABLES, cursor):
 
 def main():
     try:
-        dbSQL, cursor = loginMySql()
+        dbSQL, cursor, db_name = loginMySql()
     except:
         print('error login MySQL')
-    db_name = 'ske_2'
     TABLES = {}
     TABLES['seeds'] = (
                        "CREATE TABLE `seeds` ("
