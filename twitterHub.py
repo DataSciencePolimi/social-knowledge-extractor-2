@@ -53,8 +53,10 @@ def getTweets(twitter, account, N, start_date, end_date, id_experiment):
                 if (tweets.lang == None):
                     tweets.lang = detect(tweets.text.replace("\n", " "))
                 if (tweets.lang in languages):
-                    d = {'id_user': tweets.user.id_str, 'screen_name': tweets.user.screen_name.lower(), 'text': '', 'lang':tweets.lang, 'favourite_count': tweets.favorite_count, 'retweet_count': tweets.retweet_count, 'create_at': tweets.created_at, 'mentions': tweets.entities['user_mentions'], 'id_tweet':tweets.id_str, 'id_experiment': [id_experiment], 'coordinates':tweets.coordinates}
+                    d = {'id_user': tweets.user.id_str, 'screen_name': tweets.user.screen_name.lower(), 'text': '', 'lang':tweets.lang, 'favourite_count': tweets.favorite_count, 'retweet_count': tweets.retweet_count, 'create_at': tweets.created_at, 'mentions': tweets.entities['user_mentions'], '_id':tweets.id_str, 'id_experiment': [id_experiment], 'coordinates':tweets.coordinates}
                     user_tweets.append(d)
+            if i != iteration:
+                user_tweets = user_tweets[:len(user_tweets)-1]
             if len(user_timeline)<max_per_request:
                 break
     else:
