@@ -70,7 +70,7 @@ def getTweets(twitter, account, N, start_date, end_date, id_experiment):
 def storeTweets(tweets, db):
     collection = 'tweets'
     experiment = tweets['id_experiment'][0]
-    t = db[collection].find_one({'id_tweet':tweets['id_tweet']})
+    t = db[collection].find_one({'_id':tweets['_id']})
     if t == None:
         db[collection].insert(tweets)
     else:
@@ -148,6 +148,7 @@ def main():
             print(account+' error')
             continue
         try:
+            print(db)
             for tweet in tweets:
                 storeTweets(tweet, db)
         except:
