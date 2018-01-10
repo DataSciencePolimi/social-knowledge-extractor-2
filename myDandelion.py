@@ -109,7 +109,7 @@ def addStart(list, start):
 def main():
     #input id_exp seed o candidate?
 
-    MAX_QUERY = 1038476
+    MAX_QUERY = 4000
     confidence = 0.
     args = sys.argv[1:]
     id_exp = str(args[0])
@@ -129,9 +129,10 @@ def main():
         lenght = len(all_tweets[lang])
         if lenght == 0:
             continue
-        size_tweets = sys.getsizeof(all_tweets[lang])
-        numbOfCalls = math.ceil(size_tweets/MAX_QUERY)
+#        size_tweets = sys.getsizeof(all_tweets[lang])
+        numbOfCalls = math.ceil(lenght/MAX_QUERY)
         num_bytes = math.ceil(lenght/numbOfCalls)
+        print(lenght)
         print(numbOfCalls)
         start = 0 #indice di inizio del sottotesto che dobbiamo inviare a dandelion
         annotations = []
