@@ -53,6 +53,8 @@ def findInstances(id_experiment,id_user, expert_types, db, N):
         if 'annotation' in t:
             for i in t['annotation']:
                 for type in i['types']:
+                    type = type.split('ontology/')[1]
+                    print(type)
                     if type in expert_types:
                         inst = i['uri'].split('/')[-1].replace('.','')
                         if inst in instances:
@@ -85,6 +87,7 @@ def main():
         sys.exit(2)
     id_experiment = args[0]
     type = args[1]
+    N = None
     if len(args)>2:
         N = int(args[2])
     users = getUsers(id_experiment, type, db)
